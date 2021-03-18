@@ -14,7 +14,7 @@ commands:
           command: |
           # Your code here
             # destroy s3
-            aws s3 rm "s3://${OldPipelineID}" --recursive
+            aws s3 rm "s3://<<parameters.workflow_id>> --recursive
             # destroy front-end
             aws cloudformation delete-stack --stack-name frontend_<<parameters.workflow_id>>
             # destroy back-end
@@ -33,7 +33,7 @@ commands:
           # Add when this will run
           command: |
             curl -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" \
-            --request GET https://api.memstash.io/values/migration-results
+            --request GET https://api.memstash.io/values/<<parameters.workflow_id>>
             SUCCESS = 1
             if(( $SUCCESS==1 )); 
             then
