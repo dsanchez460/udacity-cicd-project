@@ -12,9 +12,9 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-          # Your code here
+            # Your code here
             # destroy s3
-            aws s3 rm "s3://<<parameters.workflow_id>> --recursive
+            aws s3 rm s3://<<parameters.workflow_id>> --recursive
             # destroy front-end
             aws cloudformation delete-stack --stack-name frontend_<<parameters.workflow_id>>
             # destroy back-end
