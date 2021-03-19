@@ -405,9 +405,9 @@ jobs:
               # delete s3
               aws s3 rm s3://<<parameters.workflow_id>> --recursive
               # delete front-end
-              aws cloudformation delete-stack --stack-name frontend_<<parameters.workflow_id>>
+              aws cloudformation delete-stack --stack-name fe_${OldWorkflowID
               # delete back-end
-              aws cloudformation delete-stack --stack-name backend_<<parameters.workflow_id>>
+              aws cloudformation delete-stack --stack-name be_${OldWorkflowID
             fi
 
 workflows:
