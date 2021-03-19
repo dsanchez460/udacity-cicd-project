@@ -189,10 +189,10 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             # Your code here
-            aws ec2 describe-instances \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:cicdproj-backend" \
-            --output text >> .circleci/ansible/inventory.txt
+            aws ec2 describe-instances
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:cicdproj-backend" \
+              --output text >> .circleci/ansible/inventory.txt
             exit 1
       - persist_to_workspace:
           root: ~/
@@ -211,7 +211,7 @@ jobs:
       - checkout
       # Add ssh keys with fingerprint
       - add_ssh_keys:
-          fingerprints: ["de:8e:d4:0d:e7:60:a1:eb:45:be:28:14:39:5e:8c:4f"]
+          fingerprints: ["a2:63:0f:de:17:90:48:c7:3e:56:78:62:14:1a:82:a4"]
       # attach workspace
       - attach_workspace:
             at: ~/project
@@ -250,7 +250,7 @@ jobs:
           command: |
             # Your code here
             curl -H "Content-Type: text/plain" -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" \
-            --request PUT --data "0" https://api.memstash.io/values/migration-results
+              --request PUT --data "0" https://api.memstash.io/values/migration-results
             exit 1
      # Here's where you will add some code to rollback on failure      
       - destroy-environment:
@@ -276,9 +276,9 @@ jobs:
           command: |
             # your code here
             aws ec2 describe-instances \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:cicdproj-backend" \
-            --output text >> ${BACKEND_IP}
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:cicdproj-backend" \
+              --output text >> ${BACKEND_IP}
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
       - run:
@@ -301,7 +301,7 @@ jobs:
       - checkout
       # Add ssh keys with fingerprint
       - add_ssh_keys:
-          fingerprints: ["de:8e:d4:0d:e7:60:a1:eb:45:be:28:14:39:5e:8c:4f"]
+          fingerprints: ["a2:63:0f:de:17:90:48:c7:3e:56:78:62:14:1a:82:a4"]
       # attach workspace
       - run:
           name: Install dependencies
@@ -336,9 +336,9 @@ jobs:
           command: |
             # your code here
             aws ec2 describe-instances \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:cicdproj-backend" \
-            --output text >> ${BACKEND_IP}
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:cicdproj-backend" \
+              --output text >> ${BACKEND_IP}
             export API_URL="http://${BACKEND_IP}:3030"
       - run:
           name: Backend smoke test.
@@ -376,14 +376,13 @@ jobs:
           name: Update cloudfront distribution
           command: |
             # your code here
-            aws cloudformation deploy --template-file .circleci/files/cloudfront.yml
-            --stack-name udapeople-cloudfront --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID}"
-
-      # Here's where you will add some code to rollback on failure  
+            aws cloudformation deploy --template-file .circleci/files/cloudfront.yml \
+              --stack-name udapeople-cloudfront --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID}"
+      # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID}
 
-cleanup:
+  cleanup:
     docker:
       # Docker image here
       - image: amazon/aws-cli
@@ -395,7 +394,7 @@ cleanup:
           command: |
             # your code here
             export OldWorkflowID=$(aws cloudformation list-exports \
-            --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
+              --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
             export STACKS=["be_${OldWorkflowID", "fe_${OldWorkflowID"] #put the list of stacks here
       - run:
           name: Remove old stacks and files
