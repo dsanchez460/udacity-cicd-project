@@ -173,7 +173,6 @@ jobs:
               --tags Name=cicdproj-backend \
               --stack-name "be-${CIRCLE_WORKFLOW_ID}" \
               --parameter-overrides ID="be-${CIRCLE_WORKFLOW_ID}" \
-              --region eu-west-2
               exit 1
       - run:
           name: Ensure front-end infrastructure exist
