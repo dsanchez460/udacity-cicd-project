@@ -16,9 +16,9 @@ commands:
             # destroy s3
             aws s3 rm s3://<<parameters.workflow_id>> --recursive
             # destroy front-end
-            aws cloudformation delete-stack --stack-name fe_<<parameters.workflow_id>>
+            aws cloudformation delete-stack --stack-name frontend-<<parameters.workflow_id>>
             # destroy back-end
-            aws cloudformation delete-stack --stack-name be_<<parameters.workflow_id>>
+            aws cloudformation delete-stack --stack-name backend-<<parameters.workflow_id>>
             exit 1
 
   revert-migrations:
@@ -170,9 +170,9 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
-              --tags project=ds-proj \
               --stack-name "backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+              --tags project=ds-proj \
               exit 1
       - run:
           name: Ensure front-end infrastructure exist
@@ -203,7 +203,7 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure      
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID}
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   configure-infrastructure:
     docker:
@@ -232,7 +232,7 @@ jobs:
             exit 1
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   run-migrations:
     docker:
@@ -257,9 +257,9 @@ jobs:
             exit 1
      # Here's where you will add some code to rollback on failure      
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID}
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID}
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   deploy-frontend:
     docker:
@@ -293,7 +293,7 @@ jobs:
             npm run build
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID}
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   deploy-backend:
     docker:
@@ -319,7 +319,7 @@ jobs:
             ansible-playbook -i /.circleci/ansible/inventory.txt /.circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID}
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   smoke-test:
     docker:
@@ -361,7 +361,7 @@ jobs:
               fi
       # Here's where you will add some code to rollback on failure  
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID}
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   cloudfront-update:
     docker:
@@ -383,7 +383,7 @@ jobs:
               --stack-name udapeople-cloudfront --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID}"
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID}
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   cleanup:
     docker:
