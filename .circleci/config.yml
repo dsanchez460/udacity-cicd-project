@@ -169,10 +169,6 @@ jobs:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
-            #              --template-file .circleci/files/backend.yml \
-            #              --tags Name=cicdproj-backend \
-            #              --stack-name "be-${CIRCLE_WORKFLOW_ID}" \
-            #              --parameter-overrides NAME="be-${CIRCLE_WORKFLOW_ID}" \
               --tags project=your-tag \
               --stack-name "backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
@@ -183,8 +179,8 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags Name=cicdproj-frontend \
-              --stack-name "fe-${CIRCLE_WORKFLOW_ID}" \
-              --parameter-overrides ID="fe-${CIRCLE_WORKFLOW_ID}"
+              --stack-name "frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
               exit 1
       # setup to use persist_to_workspace
       - run: |
