@@ -19,7 +19,7 @@ commands:
             aws cloudformation delete-stack --stack-name frontend-<<parameters.workflow_id>>
             # destroy back-end
             aws cloudformation delete-stack --stack-name backend-<<parameters.workflow_id>>
-            exit 1
+#            exit 1
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -182,7 +182,7 @@ jobs:
               --tags project=cicdproj-frontend \
               --stack-name "frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
-              exit 1
+#              exit 1
       # setup to use persist_to_workspace
       - run: |
           yum -y install tar
