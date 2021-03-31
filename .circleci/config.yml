@@ -179,7 +179,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              --tags project=cicdproj-frontend \
+              --tags project=ds-cicdproj-frontend \
               --stack-name "frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
 #              exit 1
@@ -194,7 +194,7 @@ jobs:
             # Your code here
             aws ec2 describe-instances
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:cicdproj-backend" \
+              --filters "Name=tag:ds-cicdproj-backend" \
               --output text >> .circleci/ansible/inventory.txt
             exit 1
       - persist_to_workspace:
