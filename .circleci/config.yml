@@ -14,7 +14,7 @@ commands:
           command: |
             # Your code here
             # destroy s3
-            aws s3 rm s3://<<parameters.workflow_id>> --recursive
+            aws s3 rm s3://udapeople-<<parameters.workflow_id>> --recursive
             # destroy front-end
             aws cloudformation delete-stack --stack-name frontend-<<parameters.workflow_id>>
             # destroy back-end
