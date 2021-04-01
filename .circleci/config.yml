@@ -194,8 +194,7 @@ jobs:
             # Your code here
             aws ec2 describe-instances
               --filters "Name=tag:ds-cicdproj-backend" \
-              --query "Reservations[*].Instances[*].PublicIpAddress" \
-              --no-cli-pager \
+              --query "Reservations[].Instances[].PublicIpAddress" \
               --output text >> .circleci/ansible/inventory.txt
             exit 1
       - persist_to_workspace:
