@@ -197,9 +197,9 @@ jobs:
               --filters "Name=tag:project,value=ds-cicdproj-backend" \
               --query "Reservations[*].Instances[*].PublicIpAddress" \
               --output text >> .circleci/ansible/inventory.txt
+            exit 1
           environment:
             TERM: xterm
-            exit 1
       - persist_to_workspace:
           root: ~/
           paths:
