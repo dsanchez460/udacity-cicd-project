@@ -198,7 +198,7 @@ jobs:
               --query "Reservations[*].Instances[*].PublicIpAddress" \
               --output text >> .circleci/ansible/inventory.txt
           environment:
-            TERM: xterm   # Stops AWS-CLI complaining because its got a dumb TTY
+            TERM: xterm
             exit 1
       - persist_to_workspace:
           root: ~/
