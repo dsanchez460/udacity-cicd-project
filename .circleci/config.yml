@@ -193,7 +193,7 @@ jobs:
           command: |
             # Your code here
             aws ec2 describe-instances
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --query "Reservations[*].Instances[*].PublicIpAddress" \
               --filters "Name=tag:ds-cicdproj-backend" \
               --output text >> .circleci/ansible/inventory.txt
             exit 1
