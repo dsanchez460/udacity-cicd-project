@@ -197,6 +197,8 @@ jobs:
               --filters "Name=tag:project,value=ds-cicdproj-backend" \
               --query "Reservations[*].Instances[*].PublicIpAddress" \
               --output text >> .circleci/ansible/inventory.txt
+          environment:
+            TERM: xterm   # Stops AWS-CLI complaining because its got a dumb TTY
             exit 1
       - persist_to_workspace:
           root: ~/
