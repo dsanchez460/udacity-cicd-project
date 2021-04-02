@@ -196,6 +196,7 @@ jobs:
             aws ec2 describe-instances
               --filters "Name=tag:project,value=ds-cicdproj-backend" \
               --query "Reservations[*].Instances[*].PublicIpAddress" \
+              --no-paginate
               --output text >> .circleci/ansible/inventory.txt
 #              exit 1
           environment:
