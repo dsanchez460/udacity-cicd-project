@@ -195,7 +195,7 @@ jobs:
               --filters "Name=tag:project,Values=ds-cicdproj-backend" \
               --query "Reservations[*].Instances[*].PublicIpAddress" \
               --output text >> .circleci/ansible/inventory.txt
-            cat inventory.txt
+            cat .circleci/ansible/inventory.txt
 
       #            aws ec2 describe-instances
 #              --filters "Name=tag:project,Values=ds-cicdproj-backend" \
