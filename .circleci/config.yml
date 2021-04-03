@@ -13,6 +13,7 @@ commands:
           when: on_fail
           command: |
             # Your code here
+            echo <<parameters.workflow_id>>
             # destroy s3
             aws s3 rm s3://udapeople-<<parameters.workflow_id>> --recursive
             # destroy front-end
@@ -196,13 +197,6 @@ jobs:
               --query "Reservations[*].Instances[*].PublicIpAddress" \
               --output text >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
-
-      #            aws ec2 describe-instances
-#              --filters "Name=tag:project,Values=ds-cicdproj-backend" \
-#              --query "Reservations[*].Instances[*].PublicIpAddress" \
-#              --output text >> .circleci/ansible/inventory.txt
-#          environment:
-#            TERM: xterm
       - persist_to_workspace:
           root: ~/
           paths:
