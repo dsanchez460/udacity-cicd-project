@@ -13,7 +13,6 @@ commands:
           when: on_fail
           command: |
             # Your code here
-            echo <<parameters.workflow_id>>
             # destroy s3
             aws s3 rm s3://udapeople-<<parameters.workflow_id>> --recursive
             # destroy front-end
@@ -223,6 +222,7 @@ jobs:
           command: |
             # Your code here
             apk add --update ansible
+            pip3 install awscli
             exit 1
       - run:
           name: Configure server
