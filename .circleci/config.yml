@@ -223,7 +223,7 @@ jobs:
             # Your code here
             apk add --update ansible
             pip3 install awscli
-            exit 1
+#            exit 1
       - run:
           name: Configure server
           command: |
