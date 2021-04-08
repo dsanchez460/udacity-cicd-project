@@ -222,6 +222,8 @@ jobs:
           name: Install dependencies
           command: |
 #            Your code here
+            apk add --update ansible
+            pip3 install awscli
 #            apk add --no-cache \
 #                python3 \
 #                py3-pip \
@@ -229,8 +231,8 @@ jobs:
 #            && pip3 install \
 #                awscli \
 #            && rm -rf /var/cache/apk/*
-            apk add --update ansible
-            pip3 install awscli
+#            apk add --update ansible
+#            pip3 install awscli
 #            apk add --update ansible
 #            exit 1
       - run:
