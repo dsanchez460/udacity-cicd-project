@@ -247,7 +247,7 @@ jobs:
           command: |
             # Your code here
             sudo apt update
-            apt install \
+            sudo apt install \
                 python3 \
                 py3-pip \
             && pip3 install --upgrade pip \
