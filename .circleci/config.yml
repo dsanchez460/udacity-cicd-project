@@ -223,7 +223,7 @@ jobs:
           command: |
             # Your code here
             apk add --update ansible
-#            pip3 install awscli
+            pip3 install awscli
 #            apk add --no-cache \
 #                python3 \
 #                py3-pip \
@@ -253,12 +253,17 @@ jobs:
       # Checkout code from git
       - checkout
       - run:
+          name: Install dependencies
+          command: |
+            # Your code here
+            pip3 install awscli
+      - run:
           name: Run migrations
           command: |
             # Your code here
             cd backend
             npm run migrations
-            exit 1
+#            exit 1
       - run:
           name: Send migration results to memstash
           command: |
