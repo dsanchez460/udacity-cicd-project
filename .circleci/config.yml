@@ -246,8 +246,8 @@ jobs:
           name: Install dependencies
           command: |
             # Your code here
-            apt-get update && \
-            apt install \
+            sudo apt-get update && \
+            sudo apt-get install \
                 python3-pip \
             && pip3 install --U pip \
             && pip3 install awscli
