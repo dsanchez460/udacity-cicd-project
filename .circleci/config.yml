@@ -246,15 +246,12 @@ jobs:
           name: Install dependencies
           command: |
             # Your code here
-            apk add --no-cache \
+            sudo apt update \
+            apt install \
                 python3 \
                 py3-pip \
             && pip3 install --upgrade pip \
-            && pip3 install \
-                awscli \
-            && rm -rf /var/cache/apk/*
-            apk add --update ansible
-            pip3 install awscli
+            && pip3 install awscli
       - run:
           name: Run migrations
           command: |
