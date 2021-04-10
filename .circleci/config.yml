@@ -260,6 +260,15 @@ jobs:
             npm run build
             npm run migrations >> migrations.txt
             cat migrations.txt
+            echo ENVIRONMENT=production >> .env
+            echo TYPEORM_CONNECTION=postgres >> .env
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> .env
+            echo TYPEORM_HOST=$TYPEORM_HOST >> .env
+            echo TYPEORM_PORT=$TYPEORM_PORT >> .env
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> .env
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> .env
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> .env
+            cat .env
 #            exit 1
       - run:
           name: Send migration results to memstash
