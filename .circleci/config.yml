@@ -256,6 +256,15 @@ jobs:
           command: |
             # Your code here
             cd backend
+            ENVIROMENT=$ENVIROMENT
+            TYPEORM_CONNECTION=$TYPEORM_CONNECTION
+            TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR
+            TYPEORM_ENTITIES=$TYPEORM_ENTITIES
+            TYPEORM_HOST=$TYPEORM_HOST
+            TYPEORM_PORT=$TYPEORM_PORT
+            TYPEORM_USERNAME=$TYPEORM_USERNAME
+            TYPEORM_PASSWORD=$TYPEORM_PASSWORD
+            TYPEORM_DATABASE=$TYPEORM_DATABASE
             npm install
             npm run build
             npm run migrations >> migrations.txt
