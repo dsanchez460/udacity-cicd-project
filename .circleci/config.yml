@@ -32,19 +32,19 @@ commands:
           name: Revert migrations
           # Add when this will run
           command: |
-            curl -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" \
-            --request GET https://api.memstash.io/values/<<parameters.workflow_id>>
-            SUCCESS = 1
-            if(( $SUCCESS==1 )); 
-            then
+#            curl -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" \
+#            --request GET https://api.memstash.io/values/<<parameters.workflow_id>>
+#            SUCCESS = 1
+#            if(( $SUCCESS==1 ));
+#            then
               # revert the migrations
-              cd ~/project/backend
-              npm install
-              #  Add revert code here. You can find this in the Getting Started section.
-              cd backend
-              npm run migrations:revert
-              exit 1
-            fi
+            cd ~/project/backend
+            npm install
+            #  Add revert code here. You can find this in the Getting Started section.
+            cd backend
+            npm run migrations:revert
+            exit 1
+#            fi
 
 jobs:
   build-frontend:
@@ -269,7 +269,7 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> .env
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> .env
             cat .env
-#            exit 1
+            exit 1
       - run:
           name: Send migration results to memstash
           command: |
