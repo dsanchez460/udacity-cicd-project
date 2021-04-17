@@ -35,16 +35,13 @@ commands:
             cd ~/project/backend
             npm install
             #  Add revert code here. You can find this in the Getting Started section.
-            # revert the migrations
-            cd backend
-            npm run migrations:revert
-#            fi
+            if curl -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" --request GET https://api.memstash.io/values/migration_<<parameters.workflow_id>> == "1";
+            then
+              # revert the migrations
+              cd backend
+              npm run migrations:revert
+            fi
 #            exit 1
-#            curl -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" \
-#            --request GET https://api.memstash.io/values/<<parameters.workflow_id>>
-#            SUCCESS = 'failed'
-#            if $SUCCESS=='failed';
-#            then
 
 jobs:
   build-frontend:
@@ -259,7 +256,12 @@ jobs:
             npm install
             npm run migrations >> migrations.txt
             cat migrations.txt
-            exit 1
+            MIGRATIONSUCCESS = "0"
+            if grep -q "successfully" migrations.txt; then
+              MIGRATIONSUCCESS = "1"
+            fi
+            curl -H "Content-Type: text/plain" -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" --request PUT --data $MIGRATIONSUCCESS https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
+#            exit 1
       - run:
           name: Send migration results to memstash
           command: |
