@@ -256,7 +256,7 @@ jobs:
             npm install
             npm run migrations >> migrations.txt
             cat migrations.txt
-            MIGRATIONSUCCESS = "0"
+            echo MIGRATIONSUCCESS = "0"
             if grep -q "successfully" migrations.txt; then
               MIGRATIONSUCCESS = "1"
             fi
