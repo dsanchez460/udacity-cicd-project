@@ -261,12 +261,13 @@ jobs:
           name: Send migration results to memstash
           command: |
             # Your code here
-            MIGRATIONSUCCESS = "0"
-            if grep -q "successfully" migrations.txt; then
-              MIGRATIONSUCCESS = "1"
+            migrationsuccess="0"
+            if [grep -q "successfully" migrations.txt];
+            then
+              migrationsuccess="1"
             fi
             curl -H "Content-Type: text/plain" -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" \
-              --request PUT --data $MIGRATIONSUCCESS https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
+              --request PUT --data $migrationsuccess https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
 #            exit 1
      # Here's where you will add some code to rollback on failure      
       - revert-migrations:
