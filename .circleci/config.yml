@@ -382,7 +382,6 @@ jobs:
           name: Backend smoke test.
           command: |
             # your code here
-          command: |
             echo "${BACKEND_IP}"
             if curl -sL --fail "http://${BACKEND_IP}:3000/api/status"; then
               echo "Success"
@@ -394,7 +393,7 @@ jobs:
           name: Frontend smoke test.
           command: |
             # your code here
-            URL="http://udapeople-frontend-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-2.amazonaws.com"
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-2.amazonaws.com"
             if curl -s ${URL} | grep "Welcome"
               then
                 exit
