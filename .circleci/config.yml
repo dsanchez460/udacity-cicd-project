@@ -364,11 +364,7 @@ jobs:
           command: |
             # your code here
             apk add --update curl
-            sudo apt-get update && \
-            sudo apt-get install \
-                python3-pip \
-            && pip3 install -U pip \
-            && pip3 install awscli
+            pip3 install awscli
 #            yum -y install tar gzip
 #            yum -y install curl
       - run:
