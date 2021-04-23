@@ -341,9 +341,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            apk -Uuv add groff less python3 py-pip && \
-            pip install awscli && \
-            rm /var/cache/apk/*
+            pip3 install awscli
             apk add ansible
       - run:
           name: Deploy backend
@@ -366,7 +364,9 @@ jobs:
           command: |
             # your code here
             apk add --update curl
-            pip3 install awscli
+            apk -Uuv add groff less python3 py-pip && \
+            pip install awscli && \
+            rm /var/cache/apk/*
 #            yum -y install tar gzip
 #            yum -y install curl
       - run:
