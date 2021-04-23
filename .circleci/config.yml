@@ -301,8 +301,10 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            cd frontend
-            npm i
+            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
+            yum -y install nodejs
+#            cd frontend
+#            npm i
       - run:
           name: Get backend url
           command: |
