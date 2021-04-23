@@ -341,7 +341,9 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            pip3 install awscli
+            apk -Uuv add groff less python3 py-pip && \
+            pip install awscli && \
+            rm /var/cache/apk/*
             apk add ansible
       - run:
           name: Deploy backend
