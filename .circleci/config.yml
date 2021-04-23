@@ -382,7 +382,14 @@ jobs:
           name: Backend smoke test.
           command: |
             # your code here
-            exit 1
+          command: |
+            echo "${BACKEND_IP}"
+            if curl -sL --fail "http://${BACKEND_IP}:3000/api/status"; then
+              echo "Success"
+            else
+              echo "Fail"
+            fi
+#            exit 1
       - run:
           name: Frontend smoke test.
           command: |
