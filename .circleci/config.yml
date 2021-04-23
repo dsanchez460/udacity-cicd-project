@@ -377,13 +377,15 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:cicdproj-backend" \
               --output text >> BACKEND_IP
+            cat ${BACKEND_IP}
             export API_URL="http://${BACKEND_IP}:3030"
+            cat ${API_URL}
       - run:
           name: Backend smoke test.
           command: |
             # your code here
             echo "${BACKEND_IP}"
-            if curl -sL --fail "http://${BACKEND_IP}:3000/api/status"; then
+            if curl -s --fail "http://${BACKEND_IP}:3000/api/status"; then
               echo "Success"
             else
               echo "Fail"
