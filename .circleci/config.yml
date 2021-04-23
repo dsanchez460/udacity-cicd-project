@@ -363,8 +363,9 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            yum -y install tar gzip
-            yum -y install curl
+            apk add --update curl
+#            yum -y install tar gzip
+#            yum -y install curl
       - run:
           name: Get backend url
           command: |
@@ -372,7 +373,7 @@ jobs:
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:cicdproj-backend" \
-              --output text >> ${BACKEND_IP}
+              --output text >> BACKEND_IP
             export API_URL="http://${BACKEND_IP}:3030"
       - run:
           name: Backend smoke test.
