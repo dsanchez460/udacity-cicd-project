@@ -311,7 +311,7 @@ jobs:
             # your code here
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name, Value=backend=${CIRCLE_WORKFLOW_ID:0:7}" \
+              --filters "Name=tag:Name, Value=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text >> BACKEND_IP
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
@@ -375,7 +375,7 @@ jobs:
             # your code here
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name, value=backend=${CIRCLE_WORKFLOW_ID:0:7}" \
+              --filters "Name=tag:Name, value=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text >> BACKEND_IP
             cat ${BACKEND_IP}
             export API_URL="http://${BACKEND_IP}:3030"
