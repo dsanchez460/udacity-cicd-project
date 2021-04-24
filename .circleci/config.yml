@@ -311,8 +311,9 @@ jobs:
             # your code here
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --filters "Name=tag:project,Values=ds-cicdproj-backend" \
               --output text >> BACKEND_IP
+            cat BACKEND_IP
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
       - run:
@@ -375,7 +376,7 @@ jobs:
             # your code here
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --filters "Name=tag:project,Values=ds-cicdproj-backend" \
               --output text >> BACKEND_IP
             cat ${BACKEND_IP}
             export API_URL="http://${BACKEND_IP}:3030"
@@ -385,7 +386,7 @@ jobs:
           command: |
             # your code here
             echo "${BACKEND_IP}"
-            if curl -s --fail "http://${BACKEND_IP}:3000/api/status"; then
+            if curl -s --fail "${API_URL}/api/status"; then
               echo "Success"
             else
               echo "Fail"
