@@ -375,7 +375,7 @@ jobs:
             # your code here
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:cicdproj-backend" \
+              --filters "Name=tag:ds-cicdproj-backend" \
               --output text >> BACKEND_IP
             cat ${BACKEND_IP}
             export API_URL="http://${BACKEND_IP}:3030"
