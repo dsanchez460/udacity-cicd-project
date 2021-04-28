@@ -389,6 +389,7 @@ jobs:
               --output text >> BACKEND_IP
             cat BACKEND_IP
             MYIP=cat BACKEND_IP
+            echo ${MYIP}
             if curl -s --fail "https://${MYIP}/api/status"; then
               echo "Success"
             else
