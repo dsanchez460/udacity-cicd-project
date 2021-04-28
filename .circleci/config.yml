@@ -383,12 +383,10 @@ jobs:
           name: Backend smoke test.
           command: |
             # your code here
-            aws ec2 describe-instances \
+            MYIP=(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=ds-cicdproj-backend" \
-              --output text >> BACKEND_IP
-            cat BACKEND_IP
-            MYIP=cat BACKEND_IP
+              --output text)       # >> BACKEND_IP
             echo ${MYIP}
             if curl -s --fail "https://${MYIP}/api/status"; then
               echo "Success"
