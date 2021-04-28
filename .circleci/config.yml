@@ -383,7 +383,8 @@ jobs:
           name: Backend smoke test.
           command: |
             # your code here
-            echo "${MYIP}"
+            cat BACKEND_IP
+            MYIP=cat BACKEND_IP
             if curl -s --fail "https://${MYIP}/api/status"; then
               echo "Success"
             else
