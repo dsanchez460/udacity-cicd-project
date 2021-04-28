@@ -376,7 +376,7 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=ds-cicdproj-backend" \
               --output text >> BACKEND_IP
-            echo MYIP=cat BACKEND_IP
+            cat BACKEND_IP
 #            export API_URL="http://${BACKEND_IP}:3030"
 #            echo ${API_URL}
       - run:
