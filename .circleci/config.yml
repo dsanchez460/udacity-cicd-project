@@ -253,20 +253,26 @@ jobs:
           command: |
             # Your code here
             cd backend
-            echo ENVIROMENT=$ENVIROMENT > ".env"
-            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> ".env"
-            echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> ".env"
-            echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> ".env"
-            echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> ".env"
-            echo TYPEORM_HOST=$TYPEORM_HOST >> ".env"
-            echo TYPEORM_PORT=$TYPEORM_PORT >> ".env"
-            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
-            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
-            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
             npm install
             touch migrations_log.txt
             npm run migrations >> migrations_log.txt
             cat migrations_log.txt
+            echo ENVIRONMENT=production >> .env
+            echo TYPEORM_CONNECTION=postgres >> .env
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> .env
+            echo TYPEORM_HOST=$TYPEORM_HOST >> .env
+            echo TYPEORM_PORT=$TYPEORM_PORT >> .env
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> .env
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> .env
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> .env
+            mkdir ~/project/.circleci/ansible/roles/deploy/files
+            cp -r .env ~/project/backend/dist/
+            zip -r backend.zip ~/project/backend/dist/
+            cp -r backend.zip ~/project/.circleci/ansible/roles/deploy/files/
+      - persist_to_workspace:
+          root: ~/project/.circleci/ansible/
+          paths:
+            - roles/deploy/files
 #            cd ~/project/backend
 #            npm install
 #            npm run migrations >> migrations.txt
@@ -401,7 +407,7 @@ jobs:
             if curl -sL --fail "https://${MYIP}:3000/api/status"; then
               echo "Success"
             else
-              exit 1
+              echo "Fail"
             fi
 #            exit 1
       - run:
