@@ -321,11 +321,13 @@ jobs:
             cd frontend
             npm install
             npm run build
-      - run:
-          name: Deploy frontend objects
-          command: |
             cd ~/project/frontend
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+#      - run:
+#          name: Deploy frontend objects
+#          command: |
+#            cd ~/project/frontend
+#            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -396,7 +398,7 @@ jobs:
               --filters "Name=tag:project,Values=ds-cicdproj-backend" \
               --output text)
             echo ${MYIP}
-            if curl -sL --fail "https://${MYIP}/api/status"; then
+            if curl -sL --fail "https://${MYIP}:3000/api/status"; then
               echo "Success"
             else
               exit 1
