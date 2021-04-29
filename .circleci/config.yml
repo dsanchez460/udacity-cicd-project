@@ -270,9 +270,9 @@ jobs:
             zip -r backend.zip ~/project/backend/dist/
             cp -r backend.zip ~/project/.circleci/ansible/roles/deploy/files/
       - persist_to_workspace:
-          root: ~/project/.circleci/ansible/
+          root: ~/
           paths:
-            - roles/deploy/files
+            - project/.circleci/ansible/roles/deploy/files
 #            cd ~/project/backend
 #            npm install
 #            npm run migrations >> migrations.txt
@@ -362,7 +362,6 @@ jobs:
           name: Deploy backend
           command: |
             # your code here
-            ls ~/project/.circleci/ansible/roles/deploy/files/
             ansible-playbook -i project/.circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
       - destroy-environment:
