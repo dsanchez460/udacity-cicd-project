@@ -6,7 +6,7 @@
 
 - name: Copy backend files
   copy:
-    src: backend.zip
+    src: project/.circleci/ansible/roles/deploy/files/backend.zip
     dest: /home/ubuntu/backend/
 
 #- name: "update apt packages."
