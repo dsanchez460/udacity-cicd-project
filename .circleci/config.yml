@@ -315,7 +315,7 @@ jobs:
               --filters "Name=tag:project,Values=ds-cicdproj-backend" \
               --output text >> BACKEND_IP
             cat BACKEND_IP
-            API_URL="http://${BACKEND_IP}:3030"
+            API_URL="http://${cat BACKEND_IP}:3030"
             echo "API_URL: ${API_URL}"
             export API_URL=${API_URL}
             echo "${API_URL}" >> "frontend/.env"
