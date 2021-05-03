@@ -311,7 +311,7 @@ jobs:
           command: |
             # your code here
             BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:project,Values=ds-cicdproj-backend" --output text)
-            cat ${BACKEND_IP}
+            echo ${BACKEND_IP}
             API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL: ${API_URL}"
             export API_URL=${API_URL}
