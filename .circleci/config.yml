@@ -310,12 +310,13 @@ jobs:
           name: Get backend url
           command: |
             # your code here
-            aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:project,Values=ds-cicdproj-backend" \
-              --output text >> BACKEND_IP
+#            aws ec2 describe-instances \
+#              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+#              --filters "Name=tag:project,Values=ds-cicdproj-backend" \
+#              --output text >> BACKEND_IP
+            BACKEND_IP=`cat .circleci/ansible/inventory.txt | head -2 | tail -1`
             cat BACKEND_IP
-            API_URL="http://${cat BACKEND_IP}:3030"
+            API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL: ${API_URL}"
             export API_URL=${API_URL}
             echo "${API_URL}" >> "frontend/.env"
