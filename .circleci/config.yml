@@ -13,12 +13,12 @@ commands:
           when: on_fail
           command: |
             # Your code here
-            # destroy s3
-            aws s3 rm s3://udapeople-<<parameters.workflow_id>> --recursive
             # destroy front-end
             aws cloudformation delete-stack --stack-name frontend-<<parameters.workflow_id>>
             # destroy back-end
             aws cloudformation delete-stack --stack-name backend-<<parameters.workflow_id>>
+            # destroy s3
+            aws s3 rb s3://udapeople-<< parameters.workflow_id >> --force
 #            exit 1
 
   revert-migrations:
@@ -39,6 +39,7 @@ commands:
             then
               # revert the migrations
               cd backend
+              npm install
               npm run migrations:revert
             fi
 #            exit 1
