@@ -416,8 +416,8 @@ jobs:
               --filters "Name=tag:project,Values=ds-cicdproj-backend" \
               --output text)
             echo ${MYIP}
-            echo "curl_target:http://${MYIP}:3030/api/status"
-            curl "http://${MYIP}:3030/api/status"
+#            echo "curl_target:https://${MYIP}:3030/api/status"
+#            curl "https://${MYIP}:3030/api/status"
             if curl -sL --fail "https://${MYIP}:3030/api/status"; then
               echo "Success"
             else
