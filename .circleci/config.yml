@@ -373,10 +373,7 @@ jobs:
           name: Deploy backend
           command: |
             # your code here
-#            cd .circleci/ansible
-#            BACKEND_IP=`cat project/.circleci/ansible/inventory.txt | head -2 | tail -1`
-#            echo "BACKEND_IP: ${BACKEND_IP}"
-            ansible-playbook -i project/.circleci/ansible/inventory.txt deploy-backend.yml
+            ansible-playbook -i ~project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
