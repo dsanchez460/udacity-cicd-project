@@ -407,25 +407,25 @@ jobs:
               --filters "Name=tag:project,Values=ds-cicdproj-backend" \
               --output text >> BACKEND_IP
             cat BACKEND_IP
-#            export API_URL="http://${BACKEND_IP}:3030"
-#            echo ${API_URL}
-      - run:
-          name: Backend smoke test.
-          command: |
-            # your code here
-            MYIP=$(aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:project,Values=ds-cicdproj-backend" \
-              --output text)
-            echo ${MYIP}
-            echo "curl_target:http://${MYIP}:3030/api/status"
-            curl "http://${MYIP}:3030/api/status"
-            if curl -sL --fail "https://${MYIP}:3030/api/status"; then
-              echo "Success"
-            else
-              echo "Fail"
-            fi
-#            exit 1
+##            export API_URL="http://${BACKEND_IP}:3030"
+##            echo ${API_URL}
+#      - run:
+#          name: Backend smoke test.
+#          command: |
+#            # your code here
+#            MYIP=$(aws ec2 describe-instances \
+#              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+#              --filters "Name=tag:project,Values=ds-cicdproj-backend" \
+#              --output text)
+#            echo ${MYIP}
+#            echo "curl_target:http://${MYIP}:3030/api/status"
+#            curl "http://${MYIP}:3030/api/status"
+#            if curl -sL --fail "https://${MYIP}:3030/api/status"; then
+#              echo "Success"
+#            else
+#              echo "Fail"
+#            fi
+##            exit 1
       - run:
           name: Frontend smoke test.
           command: |
