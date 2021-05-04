@@ -420,7 +420,7 @@ jobs:
             echo ${MYIP}
             echo "curl_target:http://${MYIP}:3030/api/status"
             curl "http://${MYIP}:3030/api/status"
-            if curl -sL --fail "https://${MYIP}:3000/api/status"; then
+            if curl -sL --fail "https://${MYIP}:3030/api/status"; then
               echo "Success"
             else
               echo "Fail"
