@@ -290,46 +290,6 @@ jobs:
 #      - destroy-environment:
 #          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-  deploy-frontend:
-    docker:
-      # Docker image here that supports AWS CLI
-      - image: amazon/aws-cli
-    steps:
-      # Checkout code from git
-      - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            # your code here
-            yum -y install tar gzip
-            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
-            yum -y install nodejs
-#            cd frontend
-#            npm i
-      - run:
-          name: Get backend url
-          command: |
-            # your code here
-            BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:project,Values=ds-cicdproj-backend" --output text)
-            echo ${BACKEND_IP}
-            API_URL="http://${BACKEND_IP}:3030"
-            echo "API_URL: ${API_URL}"
-            export API_URL=${API_URL}
-            echo "${API_URL}" >> "frontend/.env"
-      - run:
-          name: Deploy frontend objects
-          command: |
-            # your code here
-            cd frontend
-            npm install
-            npm run build
-            aws s3 cp ~/project/frontend/dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-     # Here's where you will add some code to rollback on failure
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
@@ -375,6 +335,46 @@ jobs:
             # your code here
             ansible-playbook -i ~project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+#      - revert-migrations:
+#          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
+  deploy-frontend:
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
+    steps:
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+            yum -y install tar gzip
+            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
+            yum -y install nodejs
+#            cd frontend
+#            npm i
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+            BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:project,Values=ds-cicdproj-backend" --output text)
+            echo ${BACKEND_IP}
+            API_URL="http://${BACKEND_IP}:3030"
+            echo "API_URL: ${API_URL}"
+            export API_URL=${API_URL}
+            echo "${API_URL}" >> "frontend/.env"
+      - run:
+          name: Deploy frontend objects
+          command: |
+            # your code here
+            cd frontend
+            npm install
+            npm run build
+            aws s3 cp ~/project/frontend/dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+     # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
