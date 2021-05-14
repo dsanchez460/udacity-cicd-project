@@ -332,7 +332,7 @@ jobs:
             cat backend/.env
             mkdir ~/project/.circleci/ansible/roles/deploy/files
             tar -C backend -czvf backent.tar.gz .            #tar -czvf app.tar.gz ./dist/*
-            cp -r backend.zip ~/project/.circleci/ansible/roles/deploy/files/
+            cp -r backent.tar.gz ~/project/.circleci/ansible/roles/deploy/files/
 #      - persist_to_workspace:
 #          root: ~/project/.circleci/ansible/
 #          paths:
