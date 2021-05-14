@@ -331,7 +331,6 @@ jobs:
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
             cat backend/.env
             mkdir ~/project/.circleci/ansible/roles/deploy/files
-            cp -r .env ~/project/backend/dist/
             zip -r backend.zip ~/project/backend/dist/
             cp -r backend.zip ~/project/.circleci/ansible/roles/deploy/files/
 #      - persist_to_workspace:
