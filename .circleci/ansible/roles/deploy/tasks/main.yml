@@ -19,10 +19,22 @@
     production: yes
     state: present
 
+- name: "Creates directory"
+  file:
+    path: /home/ubuntu/backend/
+    state: directory
+
 - name: "Copy backend files"
   copy:
-    src: ~/project/backend
-    dest: /home/ubuntu
+    src: backend.zip
+    dest: /home/ubuntu/backend/
+
+- name: "Unpack files"
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
+    zip backend.zip
+    ls
 
 - name: "Install Node"
   shell: |
