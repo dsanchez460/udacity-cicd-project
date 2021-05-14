@@ -33,7 +33,7 @@
   become: true
   shell: |
     cd /home/ubuntu/backend
-    zip backend.zip
+    tar xzvf backend.tar.gz
     ls
 
 - name: "Install Node"
