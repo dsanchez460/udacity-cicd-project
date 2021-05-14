@@ -21,7 +21,7 @@
 
 - name: "Copy backend files"
   copy:
-    src: /root/project/backend
+    src: ~/project/backend
     dest: /home/ubuntu
 
 - name: "Install Node"
