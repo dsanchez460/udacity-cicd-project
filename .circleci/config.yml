@@ -268,8 +268,8 @@ jobs:
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
             cat .env
             cd backend
-#            npm install
-#            npm run build
+            # npm install
+            # npm run build
             touch migrations_log.txt
             npm run migrations >> migrations.txt
             cat migrations.txt
