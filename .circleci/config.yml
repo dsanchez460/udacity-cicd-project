@@ -256,7 +256,6 @@ jobs:
           no_output_timeout: 10m
           command: |
             # Your code here
-            cd backend
             echo ENVIROMENT=$ENVIROMENT > ".env"
             echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> ".env"
             echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> ".env"
@@ -268,7 +267,9 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
             cat .env
+            cd backend
             npm install
+            npm run build
             touch migrations_log.txt
             npm run migrations >> migrations.txt
             cat migrations.txt
@@ -278,7 +279,7 @@ jobs:
           command: |
             # Your code here
             migrationsuccess="0"
-            if grep -q "successfully" migrations.txt;
+            if grep -q "successfully" ~/project/backend/migrations.txt;
             then
               migrationsuccess="1"
             fi
