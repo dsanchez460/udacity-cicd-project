@@ -268,8 +268,8 @@ jobs:
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
             cat .env
             cd backend
-            npm install
-            npm run build
+#            npm install
+#            npm run build
             touch migrations_log.txt
             npm run migrations >> migrations.txt
             cat migrations.txt
@@ -331,6 +331,9 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
             cat backend/.env
+            npm i
+            npm run build
+            cp -rf node_modules ./dist/
             mkdir ~/project/.circleci/ansible/roles/deploy/files
             tar -C backend -czvf backent.tar.gz .            #tar -czvf app.tar.gz ./dist/*
             cp -r backent.tar.gz ~/project/.circleci/ansible/roles/deploy/files/
