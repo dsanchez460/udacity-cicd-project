@@ -376,8 +376,8 @@ jobs:
             npm run build
             # cp -rf node_modules ./dist/
             mkdir ~/project/.circleci/ansible/roles/deploy/files
-            tar -C backend -czvf backent.tar.gz .            #tar -czvf app.tar.gz ./dist/*
-            cp -r backent.tar.gz ~/project/.circleci/ansible/roles/deploy/files/
+            tar -C backend -czvf backend.tar.gz .            #tar -czvf app.tar.gz ./dist/*
+            cp -r backend.tar.gz ~/project/.circleci/ansible/roles/deploy/files/
 #      - persist_to_workspace:
 #          root: ~/project/.circleci/ansible/
 #          paths:
