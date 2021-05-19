@@ -333,7 +333,7 @@ jobs:
             cat backend/.env
             npm i
             npm run build
-            cp -rf node_modules ./dist/
+            # cp -rf node_modules ./dist/
             mkdir ~/project/.circleci/ansible/roles/deploy/files
             tar -C backend -czvf backent.tar.gz .            #tar -czvf app.tar.gz ./dist/*
             cp -r backent.tar.gz ~/project/.circleci/ansible/roles/deploy/files/
@@ -349,8 +349,8 @@ jobs:
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-#      - revert-migrations:
-#          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   deploy-frontend:
     docker:
