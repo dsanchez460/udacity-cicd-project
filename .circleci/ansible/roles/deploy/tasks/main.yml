@@ -26,7 +26,7 @@
 
 - name: "Copy backend files"
   copy:
-    src: backent.tar.gz
+    src: backend.tar.gz
     dest: /home/ubuntu/backend/
 
 - name: "Unpack files"
