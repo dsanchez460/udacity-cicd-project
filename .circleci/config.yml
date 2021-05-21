@@ -361,8 +361,12 @@ jobs:
               --tags project=udapeople \
                --stack-name "udapeople-cloudfront" \
                --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" 
-      - destroy-environment
-      - revert-migrations
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
   cleanup:
     docker:
       - image: amazon/aws-cli
@@ -384,8 +388,6 @@ jobs:
               aws s3 rm s3://udapeople-kk1j437dhjnmmz19339 --recursive
             fi
 
-  
-
 workflows:
   default:
     jobs:
@@ -403,47 +405,18 @@ workflows:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           filters:
             branches:
-              only:
-                - main
+              only: [test-two]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-          filters:
-            branches:
-              only:
-                - main
       - run-migrations:
           requires: [configure-infrastructure]
-          filters:
-            branches:
-              only:
-                - main
       - deploy-frontend:
           requires: [run-migrations]
-          filters:
-            branches:
-              only:
-                - main
       - deploy-backend:
           requires: [run-migrations]
-          filters:
-            branches:
-              only:
-                - main
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-          filters:
-            branches:
-              only:
-                - main
       - cloudfront-update:
           requires: [smoke-test]
-          filters:
-            branches:
-              only:
-                - main
       - cleanup:
           requires: [cloudfront-update]
-          filters:
-            branches:
-              only:
-                - main
