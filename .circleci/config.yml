@@ -14,9 +14,9 @@ commands:
           command: |
             # Your code here
             # destroy front-end
-            aws cloudformation delete-stack --stack-name frontend-<<parameters.workflow_id>>
+            aws cloudformation delete-stack --stack-name fe-<<parameters.workflow_id>>
             # destroy back-end
-            aws cloudformation delete-stack --stack-name backend-<<parameters.workflow_id>>
+            aws cloudformation delete-stack --stack-name be-<<parameters.workflow_id>>
             # destroy s3
             aws s3 rb s3://udapeople-<< parameters.workflow_id >> --force
 
@@ -151,7 +151,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
-              --stack-name "backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --stack-name "be-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=ds-cicdproj-backend
       - run:
@@ -160,7 +160,7 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project=ds-cicdproj-frontend \
-              --stack-name "frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --stack-name "fe-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Add back-end ip to ansible inventory
@@ -199,6 +199,9 @@ jobs:
             # pwd
             # cat inventory.txt
             ansible-playbook -i project/.circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   run-migrations:
     docker:
@@ -321,7 +324,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            BACKEND_IP=$(curl -H "token: 3e6d53ae-eeb4-4811-8950-0202595869fd" --request GET https://api.memstash.io/values/BACKEND_IP)
+            BACKEND_IP=$(curl -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" --request GET https://api.memstash.io/values/BACKEND_IP)
             
       - run:
           name: Backend smoke test.
@@ -335,7 +338,7 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-us-west-2.amazonaws.com/index.html"
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-us-west-2.amazonaws.com"
             if curl -s ${URL} | grep "Welcome";
             then
               exit 0
@@ -383,6 +386,8 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
+            echo OldWorkflowID: "${OldWorkflowID}"
+            echo CIRCLE_WORKFLOW_ID: "${CIRCLE_WORKFLOW_ID:0:7}"
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]];
             then
               aws s3 rm s3://udapeople-kk1j437dhjnmmz19339 --recursive
