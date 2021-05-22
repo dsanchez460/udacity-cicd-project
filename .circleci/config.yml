@@ -334,7 +334,11 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
-            echo "${BE_IP}"
+            BE_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=ds-cicdproj-backend" \
+              --output text)
+            echo ${BE_IP}
             if curl --fail "http://${BE_IP}:3030/api/status"; then
               echo "Success"
             else
