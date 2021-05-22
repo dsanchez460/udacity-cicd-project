@@ -31,8 +31,8 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            cd ~/project/backend
-            npm install
+            # cd ~/project/backend
+            # npm install
             #  Add revert code here. You can find this in the Getting Started section.
             if curl -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" --request GET https://api.memstash.io/values/migration_<<parameters.workflow_id>> == "0";
             then
@@ -330,15 +330,16 @@ jobs:
           name: Backend smoke test.
           command: |
             echo "${BACKEND_IP}"
-            if curl -sL --fail "http://${BACKEND_IP}:3030/api/status"; then
+            if curl --fail "http://${BACKEND_IP}:3030/api/status"; then
               echo "Success"
             else
               echo "Fail"
+              exit 1
             fi
       - run:
           name: Frontend smoke test.
           command: |
-            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-us-west-2.amazonaws.com"
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-us-west-2.amazonaws.com/index.html"
             if curl -s ${URL} | grep "Welcome";
             then
               exit 0
