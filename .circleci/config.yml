@@ -324,13 +324,18 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            BACKEND_IP=$(curl -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" --request GET https://api.memstash.io/values/BACKEND_IP)
-            
+            BE_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=ds-cicdproj-backend" \
+              --output text)
+            echo ${BE_IP}
+            # BACKEND_IP=$(curl -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" --request GET https://api.memstash.io/values/BACKEND_IP)
+
       - run:
           name: Backend smoke test.
           command: |
-            echo "${BACKEND_IP}"
-            if curl --fail "http://${BACKEND_IP}:3030/api/status"; then
+            echo "${BE_IP}"
+            if curl --fail "http://${BE_IP}:3030/api/status"; then
               echo "Success"
             else
               echo "Fail"
