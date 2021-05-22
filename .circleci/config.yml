@@ -216,6 +216,7 @@ jobs:
             npm run build
             touch migrations.txt
             npm run migrations >> migrations.txt
+            cat migrations.txt
             migrationsuccess="0"
             touch .env
             echo ENVIRONMENT=production >> .env
