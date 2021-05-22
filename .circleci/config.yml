@@ -217,12 +217,6 @@ jobs:
             touch migrations.txt
             npm run migrations >> migrations.txt
             migrationsuccess="0"
-            if [grep -q "successfully" migrations.txt];
-            then
-              migrationsuccess="1"
-            fi
-            curl -H "Content-Type: text/plain" -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" \
-              --request PUT --data $migrationsuccess https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
             touch .env
             echo ENVIRONMENT=production >> .env
             echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> .env
@@ -236,6 +230,17 @@ jobs:
             cp -r .env ~/project/backend/dist/
             zip -r backend.zip ~/project/backend/dist/
             cp -r backend.zip ~/project/.circleci/ansible/roles/deploy/files/
+      - run:
+          name: Send migration results to memstash
+          command: |
+            # Your code here
+            migrationsuccess="0"
+            if [grep -q "successfully" migrations.txt];
+            then
+              migrationsuccess="1"
+            fi
+            curl -H "Content-Type: text/plain" -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" \
+              --request PUT --data $migrationsuccess https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
       - persist_to_workspace:
           root: ~/project/backend/
           paths:
