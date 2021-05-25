@@ -328,7 +328,6 @@ jobs:
             # ls ~/project/.circleci/ansible
             # export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/deploy-backend.yml
-            echo "deploy complete"
           no_output_timeout: 30m
 
   smoke-test:
@@ -358,7 +357,7 @@ jobs:
               --filters "Name=tag:project,Values=ds-cicdproj-backend" \
               --output text)
             echo ${BE_IP}
-            if curl --fail "http://${BE_IP}:3030/api/status"; then
+            if curl --fail "https://${BE_IP}:3030/api/status"; then
               echo "Success"
             else
               echo "Fail"
