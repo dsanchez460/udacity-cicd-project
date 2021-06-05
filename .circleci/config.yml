@@ -31,8 +31,6 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            # cd ~/project/backend
-            # npm install
             #  Add revert code here. You can find this in the Getting Started section.
             if curl -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" --request GET https://api.memstash.io/values/migration_<<parameters.workflow_id>> == "0";
             then
@@ -53,9 +51,12 @@ jobs:
       - run:
           name: Build front-end
           command: |
-            cd ~/project/frontend
-            npm install --save
+            cd frontend
+            npm install
             npm run build
+#            cd ~/project/frontend
+#            npm install --save
+#            npm run build
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -70,9 +71,12 @@ jobs:
       - run:
           name: Back-end build
           command: |
-            cd ~/project/backend
-            npm install --save
-            npm run build
+             cd backend
+             npm install
+             npm run build
+#            cd ~/project/backend
+#            npm install --save
+#            npm run build
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
@@ -87,10 +91,13 @@ jobs:
       - run:
           name: Front-end test
           command: |
-            cd ~/project/frontend
-            npm install
-            # npm run build
-            npm test
+             cd frontend
+             npm install
+             npm run test
+#            cd ~/project/frontend
+#            npm install
+#            # npm run build
+#            npm test
                 
   test-backend:
     docker:
@@ -102,10 +109,13 @@ jobs:
       - run:
           name: Back-end test
           command: |
-            cd ~/project/backend
-            npm install
-            # npm run build
-            npm run test
+             cd backend
+             npm install
+             npm run test
+#            cd ~/project/backend
+#            npm install
+#            # npm run build
+#            npm run test
 
   scan-frontend:
     docker:
@@ -117,10 +127,13 @@ jobs:
       - run:
           name: Front-end scan
           command: |
-            cd ~/project/frontend
-            npm install
+            cd frontend
             npm audit fix
             npm audit --audit-level=critical
+#            cd ~/project/frontend
+#            npm install
+#            npm audit fix
+#            npm audit --audit-level=critical
 
   scan-backend:
     docker:
@@ -132,10 +145,12 @@ jobs:
       - run:
           name: Back-end scan
           command: |
-            cd ~/project/backend
-            npm install
-            npm audit fix
-            npm audit --audit-level=critical
+             cd backend
+             npm audit fix --audit-level=critical --force
+#            cd ~/project/backend
+#            npm install
+#            npm audit fix
+#            npm audit --audit-level=critical
 
   deploy-infrastructure:
     docker:
@@ -174,6 +189,8 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+            - project/backend/
+#            - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -184,14 +201,17 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints:
-            - "6c:2c:6a:ec:9a:da:75:e9:3b:3d:4e:b7:aa:2c:f6:77"
+          fingerprints: ["de:8e:d4:0d:e7:60:a1:eb:45:be:28:14:39:5e:8c:4f"]
       - attach_workspace:
-          at: ./.circleci/ansible
+          at: ~/project
+      - run: cat project/.circleci/ansible/inventory.txt
       - run:
           name: Install dependencies
           command: |
             apk add --update ansible
+            apk add tar
+            apk add gzip
+            pip install awscli
       - run:
           name: Configure server
           command: |
@@ -211,26 +231,41 @@ jobs:
       - run:
           name: Run migrations
           command: |
-            cd ~/project/backend
-            npm install
-            # npm run build
-            touch migrations.txt
-            npm run migrations >> migrations.txt
-            cat migrations.txt
-            migrationsuccess="0"
-            touch .env
+            cd backend
             echo ENVIRONMENT=production >> .env
-            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> .env
-            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> .env
-            echo TYPEORM_HOST=$TYPEORM_HOST >> .env
-            echo TYPEORM_PORT=$TYPEORM_PORT >> .env
-            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> .env
-            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> .env
-            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> .env
-            mkdir ~/project/.circleci/ansible/roles/deploy/files
-            cp -r .env ~/project/backend/dist/
-            zip -r backend.zip ~/project/backend/dist/
-            cp -r backend.zip ~/project/.circleci/ansible/roles/deploy/files/
+            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> ".env"
+            echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> ".env"
+            echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> ".env"
+            echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> ".env"
+            echo TYPEORM_HOST=$TYPEORM_HOST >> ".env"
+            echo TYPEORM_PORT=$TYPEORM_PORT >> ".env"
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
+            npm install
+            touch migrations_log.txt
+            npm run migrations >> migrations_log.txt
+            cat migrations_log.txt
+#            cd ~/project/backend
+#            npm install
+#            # npm run build
+#            touch migrations.txt
+#            npm run migrations >> migrations.txt
+#            cat migrations.txt
+#            migrationsuccess="0"
+#            touch .env
+#            echo ENVIRONMENT=production >> .env
+#            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> .env
+#            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> .env
+#            echo TYPEORM_HOST=$TYPEORM_HOST >> .env
+#            echo TYPEORM_PORT=$TYPEORM_PORT >> .env
+#            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> .env
+#            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> .env
+#            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> .env
+#            mkdir ~/project/.circleci/ansible/roles/deploy/files
+#            cp -r .env ~/project/backend/dist/
+#            zip -r backend.zip ~/project/backend/dist/
+#            cp -r backend.zip ~/project/.circleci/ansible/roles/deploy/files/
       - run:
           name: Send migration results to memstash
           command: |
@@ -264,6 +299,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            yum -y install tar gzip
             curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
             yum -y install nodejs
       - run:
@@ -298,16 +334,22 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints:
-            - "6c:2c:6a:ec:9a:da:75:e9:3b:3d:4e:b7:aa:2c:f6:77"
+          fingerprints: ["de:8e:d4:0d:e7:60:a1:eb:45:be:28:14:39:5e:8c:4f"]
       - attach_workspace:
-          at: ./.circleci/ansible
+          at: ~/project
+#          at: ./.circleci/ansible
       - restore_cache:
           keys: [backend-build]
       - run:
           name: Install dependencies
           command: |
             apk add --update ansible
+            apk add tar gzip
+            apk add curl
+            apk add gzip
+            apk add nodejs
+            apk add npm
+            pip install awscli
       - run:
           name: Set env
           command: |
@@ -324,21 +366,34 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            # ls ~/project/.circleci/ansible/roles/deploy/files/
-            # ls ~/project/.circleci/ansible
+            ls ~/project/.circleci/ansible/roles/deploy/files/
+            ls ~/project/.circleci/ansible
             # export ANSIBLE_HOST_KEY_CHECKING=False
+            cat ~/project/.circleci/ansible/inventory.txt
+            ansible-playbook -i project/.circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
             ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/deploy-backend.yml
-          no_output_timeout: 30m
+
+          # no_output_timeout: 30m
+      # Here's where you will add some code to rollback on failure
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   smoke-test:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.7-alpine3.11
+#      - image: amazon/aws-cli
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            echo ""
+            apk add tar gzip curl
+            pip install awscli
+#            echo ""
+      - attach_workspace:
+          at: ~/
       - run:
           name: Get backend url
           command: |
@@ -348,36 +403,53 @@ jobs:
               --output text)
             echo ${BE_IP}
             # BACKEND_IP=$(curl -H "token: 568fab66-432b-4408-b72e-b57e1c19f236" --request GET https://api.memstash.io/values/BACKEND_IP)
-
+      - run:
+          name: Frontend smoke test.
+          command: |
+            # your code here
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3.website.us-east-2.amazonaws.com"
+            if curl -s ${URL} | grep "Welcome"
+            then
+            return 1
+            else
+            return 0
+            fi
+      - run:
+          name: Get backend url and backend smoke test.
+          command: |
+            # your code here
+            BACKEND_IP=`cat .circleci/ansible/inventory.txt | head -2 | tail -1`
+            echo "curl_target:http://${BACKEND_IP}:3030/api/status"
+            curl "http://${BACKEND_IP}:3030/api/status"
       - run:
           name: Backend smoke test.
           command: |
-            BE_IP=$(aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:project,Values=ds-cicdproj-backend" \
-              --output text)
-            echo ${BE_IP}
+            # BE_IP=$(aws ec2 describe-instances \
+            #  --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            #  --filters "Name=tag:project,Values=ds-cicdproj-backend" \
+            #  --output text)
+            #echo ${BE_IP}
             if curl --fail "https://${BE_IP}:3030/api/status"; then
               echo "Success"
             else
               echo "Fail"
               exit 1
             fi
-      - run:
-          name: Frontend smoke test.
-          command: |
-            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-us-west-2.amazonaws.com/index.html"
-            if curl -s ${URL} | grep "Welcome";
-            then
-              exit 0
-            else
-              exit 1
-            fi
+#      - run:
+#          name: Frontend smoke test.
+#          command: |
+#            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-us-west-2.amazonaws.com/index.html"
+#            if curl -s ${URL} | grep "Welcome";
+#            then
+#              exit 0
+#            else
+#              exit 1
+#            fi
       # Here's where you will add some code to rollback on failure
-#      - destroy-environment:
-#          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-#      - revert-migrations:
-#          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   cloudfront-update:
     docker:
