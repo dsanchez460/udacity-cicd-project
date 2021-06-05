@@ -366,7 +366,7 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-#            ls ~/project/.circleci/ansible/roles/deploy/files/
+            # ls ~/project/.circleci/ansible/roles/deploy/files/
             ls ~/project/.circleci/ansible
             # export ANSIBLE_HOST_KEY_CHECKING=False
             cat ~/project/.circleci/ansible/inventory.txt
