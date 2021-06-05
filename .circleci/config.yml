@@ -229,6 +229,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install dependencies
+          command: |
+            pip install awscli
+      - run:
           name: Run migrations
           command: |
             cd backend
@@ -371,9 +375,8 @@ jobs:
             # export ANSIBLE_HOST_KEY_CHECKING=False
             cat ~/project/.circleci/ansible/inventory.txt
             ansible-playbook -i project/.circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
-#            ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/deploy-backend.yml
-
-          # no_output_timeout: 30m
+            # ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/deploy-backend.yml
+          no_output_timeout: 30m
       # Here's where you will add some code to rollback on failure
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
