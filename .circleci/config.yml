@@ -13,12 +13,12 @@ commands:
           when: on_fail
           command: |
             # Your code here
+            # destroy s3
+            aws s3 rb s3://udapeople-<< parameters.workflow_id >> --force
             # destroy front-end
             aws cloudformation delete-stack --stack-name fe-<<parameters.workflow_id>>
             # destroy back-end
             aws cloudformation delete-stack --stack-name be-<<parameters.workflow_id>>
-            # destroy s3
-            aws s3 rb s3://udapeople-<< parameters.workflow_id >> --force
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.  
@@ -452,10 +452,10 @@ jobs:
 #              exit 1
 #            fi
       # Here's where you will add some code to rollback on failure
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+#      - destroy-environment:
+#          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+#      - revert-migrations:
+#          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   cloudfront-update:
     docker:
