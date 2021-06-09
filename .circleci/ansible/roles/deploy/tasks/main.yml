@@ -29,6 +29,10 @@
     cd /home/ubuntu/backend
     npm run build
 
+- name: "Get list of files"
+  ansible.builtin.shell:
+    cmd: ls -l /home/ubuntu/backend
+
 - name: "Start PM2"
   shell: |
     cd /home/ubuntu/backend
