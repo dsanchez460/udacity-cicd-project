@@ -236,7 +236,7 @@ jobs:
             && pip3 install awscli
             # pip install awscli
             cd backend
-            install npm
+            npm install
       - run:
           name: Build backend
           command: |
