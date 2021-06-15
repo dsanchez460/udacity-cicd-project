@@ -256,8 +256,8 @@ jobs:
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
-            ls project/backend
-            cat project/backend/.env
+            ls ~/project/backend
+            cat ~/project/backend/.env
             touch migrations_log.txt
             npm run migrations >> migrations_log.txt
             cat migrations_log.txt
