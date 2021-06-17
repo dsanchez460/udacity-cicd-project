@@ -245,7 +245,7 @@ jobs:
       - run:
           name: Run migrations
           command: |
-            cd root/project/backend
+            cd /root/project/backend
             echo ENVIRONMENT=production >> .env
             echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> ".env"
             echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> ".env"
@@ -256,8 +256,8 @@ jobs:
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
-            ls -a root/project/backend
-            cat root/project/backend/.env
+            ls -a /root/project/backend
+            cat /root/project/backend/.env
             touch migrations_log.txt
             npm run migrations >> migrations_log.txt
             cat migrations_log.txt
