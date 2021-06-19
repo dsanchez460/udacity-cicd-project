@@ -14,6 +14,11 @@
     production: yes
     state: present
 
+- name: "Copy backend dist files web server"
+  copy:
+    src: /root/project/backend
+    dest: /home/ubuntu/
+
 - name: "Install Node"
   shell: |
     cd /home/ubuntu/backend
@@ -24,14 +29,9 @@
     cd /home/ubuntu/backend
     npm run build
 
-- name: "Copy backend dist files web server"
-  copy:
-    src: /root/project/backend
-    dest: /home/ubuntu/
-
 - name: "Start PM2"
   shell: |
     cd /home/ubuntu/backend
     ls -a
     ls -a /root/project/backend
-    pm2 start npm --name backend -- start:hmr
+    pm2 start npm --name backend -- start
