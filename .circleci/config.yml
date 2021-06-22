@@ -203,7 +203,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["de:8e:d4:0d:e7:60:a1:eb:45:be:28:14:39:5e:8c:4f"]
       - attach_workspace:
-          at: ~/project
+          at: ~/
       - run: cat project/.circleci/ansible/inventory.txt
       - run:
           name: Install dependencies
